@@ -1,3 +1,4 @@
+import { MAX_GUESSES } from '../../constants/game'
 import { CompletedRow } from './CompletedRow'
 import { CurrentRow } from './CurrentRow'
 import { EmptyRow } from './EmptyRow'
@@ -16,7 +17,7 @@ export const Grid = ({ guesses, currentGuess }: Props) => {
       {guesses.map((guess, i) => (
         <CompletedRow key={i} guess={guess} />
       ))}
-      {guesses.length < 6 && <CurrentRow guess={currentGuess} />}
+      {guesses.length < MAX_GUESSES && <CurrentRow guess={currentGuess} />}
       {empties.map((_, i) => (
         <EmptyRow key={i} />
       ))}

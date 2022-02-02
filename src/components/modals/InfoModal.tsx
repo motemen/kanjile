@@ -1,3 +1,4 @@
+import { MAX_GUESSES } from '../../constants/game'
 import { Cell } from '../grid/Cell'
 import { BaseModal } from './BaseModal'
 
@@ -11,6 +12,7 @@ export const InfoModal = ({ isOpen, handleClose }: Props) => {
     <BaseModal title="How to play" isOpen={isOpen} handleClose={handleClose}>
       <p className="text-sm text-gray-500 dark:text-gray-300">
         四字熟語を当てます。答えを入力するとタイルの色が変わり、文字や漢字の偏旁（パーツ）が合っているかどうかが示されます。
+        {MAX_GUESSES}回チャレンジできます。
       </p>
 
       <div className="flex justify-center mb-1 mt-4">
