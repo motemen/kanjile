@@ -7,7 +7,9 @@ export const shareStatus = (guesses: string[], lost: boolean) => {
   navigator.clipboard.writeText(
     `${GAME_TITLE} ${solutionIndex} ${
       lost ? 'X' : guesses.length
-    }/${MAX_GUESSES}\n\n` + generateEmojiGrid(guesses)
+    }/${MAX_GUESSES}\n\n` +
+      generateEmojiGrid(guesses) +
+      '\n\nhttps://motemen.github.io/kanjile/'
   )
 }
 
