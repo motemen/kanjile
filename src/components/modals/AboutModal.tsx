@@ -17,6 +17,9 @@ export const AboutModal = ({ isOpen, handleClose }: Props) => {
           check out the code here
         </a>{' '}
       </p>
+      <p>
+        KanjiVG is licensed under <a href="https://creativecommons.org/licenses/by-sa/3.0/">CC BY-SA 3.0</a>.
+      </p>
     </BaseModal>
   )
 }
