@@ -49,8 +49,6 @@ type Radical = string
 type Char = string
 
 export const getGuessStatuses = (guess: string): CharStatus[] => {
-  console.log([solution, guess])
-
   const solutionChars = solution.split('')
   const guessChars = guess.split('')
 
@@ -70,17 +68,9 @@ export const getGuessStatuses = (guess: string): CharStatus[] => {
     }
   })
 
-  console.log(solutionRadicalToIndex)
-
   const guessRadicals = guessChars.map(
     (ch) => [ch, ...((KANJI_TO_RADICAL as any)[ch] || [])] as Radical[]
   )
-  guessRadicals.forEach((rr, i) => {
-    for (const r of rr) {
-      const ai = solutionRadicalToIndex[r]
-      console.log({ radical: r, guessIndex: i, solutionIndex: ai })
-    }
-  })
 
   const result = solutionChars.map<CharStatus>(() => ({ type: 'absent' }))
 
@@ -103,8 +93,6 @@ export const getGuessStatuses = (guess: string): CharStatus[] => {
       }
     }
   }
-
-  console.log(result)
 
   return result
 }
