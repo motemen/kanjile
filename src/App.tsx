@@ -172,7 +172,11 @@ function App() {
         />
       </div>
       <Grid guesses={guesses} currentGuess={currentGuess} />
-      <TextInputKeyboard onText={onText} onEnter={onEnter} />
+      <TextInputKeyboard
+        onText={onText}
+        onEnter={onEnter}
+        guessIsEmpty={currentGuess === ''}
+      />
       <InfoModal
         isOpen={isInfoModalOpen}
         handleClose={() => setIsInfoModalOpen(false)}
