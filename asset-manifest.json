@@ -1,0 +1,15 @@
+{
+  "files": {
+    "main.css": "/kanjile/static/css/main.41a3c51c.css",
+    "main.js": "/kanjile/static/js/main.7e87ef2b.js",
+    "static/js/787.3500bfec.chunk.js": "/kanjile/static/js/787.3500bfec.chunk.js",
+    "index.html": "/kanjile/index.html",
+    "main.41a3c51c.css.map": "/kanjile/static/css/main.41a3c51c.css.map",
+    "main.7e87ef2b.js.map": "/kanjile/static/js/main.7e87ef2b.js.map",
+    "787.3500bfec.chunk.js.map": "/kanjile/static/js/787.3500bfec.chunk.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.41a3c51c.css",
+    "static/js/main.7e87ef2b.js"
+  ]
+}
