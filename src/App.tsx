@@ -6,7 +6,7 @@ import {
 import { useState, useEffect } from 'react'
 import { Alert } from './components/alerts/Alert'
 import { Grid } from './components/grid/Grid'
-import { Keyboard } from './components/keyboard/Keyboard'
+import { TextInputKeyboard } from './components/keyboard/TextInputKeyboard'
 import { AboutModal } from './components/modals/AboutModal'
 import { InfoModal } from './components/modals/InfoModal'
 import { StatsModal } from './components/modals/StatsModal'
@@ -108,6 +108,12 @@ function App() {
     }
   }
 
+  const onText = (value: string) => {
+    if (value.length <= 4 && guesses.length < 6 && !isGameWon) {
+      setCurrentGuess(value)
+    }
+  }
+
   const onDelete = () => {
     setCurrentGuess(currentGuess.slice(0, -1))
   }
@@ -166,12 +172,7 @@ function App() {
         />
       </div>
       <Grid guesses={guesses} currentGuess={currentGuess} />
-      <Keyboard
-        onChar={onChar}
-        onDelete={onDelete}
-        onEnter={onEnter}
-        guesses={guesses}
-      />
+      <TextInputKeyboard onText={onText} onEnter={onEnter} />
       <InfoModal
         isOpen={isInfoModalOpen}
         handleClose={() => setIsInfoModalOpen(false)}
