@@ -15,7 +15,7 @@ export const InfoModal = ({ isOpen, handleClose }: Props) => {
       </p>
 
       <div className="flex justify-center mb-1 mt-4">
-        <Cell value="W" status="correct" />
+        <Cell value="W" status={{ type: 'correct' }} />
         <Cell value="E" />
         <Cell value="A" />
         <Cell value="R" />
@@ -28,7 +28,7 @@ export const InfoModal = ({ isOpen, handleClose }: Props) => {
       <div className="flex justify-center mb-1 mt-4">
         <Cell value="P" />
         <Cell value="I" />
-        <Cell value="L" status="present" />
+        <Cell value="L" status={{ type: 'present' }} />
         <Cell value="O" />
         <Cell value="T" />
       </div>
@@ -40,7 +40,7 @@ export const InfoModal = ({ isOpen, handleClose }: Props) => {
         <Cell value="V" />
         <Cell value="A" />
         <Cell value="G" />
-        <Cell value="U" status="absent" />
+        <Cell value="U" status={{ type: 'absent' }} />
         <Cell value="E" />
       </div>
       <p className="text-sm text-gray-500 dark:text-gray-300">

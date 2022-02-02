@@ -1,3 +1,6 @@
 [submodule "kanjivg-radical"]
 	path = kanjivg-radical
 	url = https://github.com/yagays/kanjivg-radical
+[submodule "public/kanjivg"]
+	path = public/kanjivg
+	url = https://github.com/KanjiVG/kanjivg

@@ -3,11 +3,11 @@ import { solution } from './words'
 import KANJI_TO_RADICAL from '../external/kanjivg-radical/data/kanji2radical.json'
 
 export type CharStatus =
-  | 'absent'
-  | 'radical_present'
-  | 'radical_correct'
-  | 'present'
-  | 'correct'
+  | { type: 'absent' }
+  | { type: 'radical_present'; radicals: string[] }
+  | { type: 'radical_correct'; radicals: string[] }
+  | { type: 'present' }
+  | { type: 'correct' }
 
 export type CharValue =
   | 'Q'
@@ -37,32 +37,12 @@ export type CharValue =
   | 'N'
   | 'M'
 
-// only referred by <Keybaord>, we won't need this
 export const getStatuses = (
   guesses: string[]
 ): { [key: string]: CharStatus } => {
-  const charObj: { [key: string]: CharStatus } = {}
-
-  guesses.forEach((word) => {
-    word.split('').forEach((letter, i) => {
-      if (!solution.includes(letter)) {
-        // make status absent
-        return (charObj[letter] = 'absent')
-      }
-
-      if (letter === solution[i]) {
-        //make status correct
-        return (charObj[letter] = 'correct')
-      }
-
-      if (charObj[letter] !== 'correct') {
-        //make status present
-        return (charObj[letter] = 'present')
-      }
-    })
-  })
-
-  return charObj
+  // only referred by <Keybaord>, we won't need this
+  // stub
+  return {}
 }
 
 type Radical = string
@@ -102,15 +82,15 @@ export const getGuessStatuses = (guess: string): CharStatus[] => {
     }
   })
 
-  const result = solutionChars.map<CharStatus>(() => 'absent')
+  const result = solutionChars.map<CharStatus>(() => ({ type: 'absent' }))
 
   for (let i = 0; i < guessChars.length; i++) {
     if (guessChars[i] === solutionChars[i]) {
-      result[i] = 'correct'
+      result[i] = { type: 'correct' }
       continue
     }
     if (solutionCharToIndex[guessChars[i]]) {
-      result[i] = 'present'
+      result[i] = { type: 'present' }
       continue
     }
 
@@ -118,8 +98,8 @@ export const getGuessStatuses = (guess: string): CharStatus[] => {
     for (const r of rr) {
       if (r in solutionRadicalToIndex) {
         result[i] = solutionRadicalToIndex[r].some((j) => j === i)
-          ? 'radical_correct'
-          : 'radical_present'
+          ? { type: 'radical_correct', radicals: [r] }
+          : { type: 'radical_present', radicals: [r] }
       }
     }
   }

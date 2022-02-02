@@ -1,3 +1,15 @@
 html.dark {
   background-color: rgb(15, 23, 42);
 }
+
+g[id^='kvg:StrokeNumbers'] {
+  display: none;
+}
+
+g[id^='kvg:StrokePaths'] {
+  stroke-width: 4 !important;
+}
+
+html.dark g[id^='kvg:StrokePaths'] {
+  stroke: #ffffff !important;
+}

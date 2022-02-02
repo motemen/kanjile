@@ -102,20 +102,10 @@ function App() {
     }
   }, [isGameWon, isGameLost])
 
-  const onChar = (value: string) => {
-    if (currentGuess.length < 4 && guesses.length < 6 && !isGameWon) {
-      setCurrentGuess(`${currentGuess}${value}`)
-    }
-  }
-
   const onText = (value: string) => {
     if (value.length <= 4 && guesses.length < 6 && !isGameWon) {
       setCurrentGuess(value)
     }
-  }
-
-  const onDelete = () => {
-    setCurrentGuess(currentGuess.slice(0, -1))
   }
 
   const onEnter = () => {
