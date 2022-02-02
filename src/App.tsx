@@ -103,7 +103,7 @@ function App() {
   }, [isGameWon, isGameLost])
 
   const onChar = (value: string) => {
-    if (currentGuess.length < 5 && guesses.length < 6 && !isGameWon) {
+    if (currentGuess.length < 4 && guesses.length < 6 && !isGameWon) {
       setCurrentGuess(`${currentGuess}${value}`)
     }
   }
@@ -116,7 +116,7 @@ function App() {
     if (isGameWon || isGameLost) {
       return
     }
-    if (!(currentGuess.length === 5)) {
+    if (!(currentGuess.length === 4)) {
       setIsNotEnoughLetters(true)
       return setTimeout(() => {
         setIsNotEnoughLetters(false)
@@ -132,7 +132,7 @@ function App() {
 
     const winningWord = isWinningWord(currentGuess)
 
-    if (currentGuess.length === 5 && guesses.length < 6 && !isGameWon) {
+    if (currentGuess.length === 4 && guesses.length < 6 && !isGameWon) {
       setGuesses([...guesses, currentGuess])
       setCurrentGuess('')
 
@@ -141,7 +141,7 @@ function App() {
         return setIsGameWon(true)
       }
 
-      if (guesses.length === 5) {
+      if (guesses.length === 4) {
         setStats(addStatsForCompletedGame(stats, guesses.length + 1))
         setIsGameLost(true)
       }
