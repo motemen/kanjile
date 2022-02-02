@@ -10,8 +10,7 @@ export const InfoModal = ({ isOpen, handleClose }: Props) => {
   return (
     <BaseModal title="How to play" isOpen={isOpen} handleClose={handleClose}>
       <p className="text-sm text-gray-500 dark:text-gray-300">
-        Guess the word in 6 tries. After each guess, the color of the tiles will
-        change to show how close your guess was to the word.
+        四字熟語を当てます。答えを入力するとタイルの色が変わり、文字や漢字の偏旁（パーツ）が合っているかどうかが示されます。
       </p>
 
       <div className="flex justify-center mb-1 mt-4">
@@ -21,7 +20,7 @@ export const InfoModal = ({ isOpen, handleClose }: Props) => {
         <Cell value="人" />
       </div>
       <p className="text-sm text-gray-500 dark:text-gray-300">
-        The letter W is in the word and in the correct spot.
+        「若」の字は、文字も位置も合っています。
       </p>
 
       <div className="flex justify-center mb-1 mt-4">
@@ -31,7 +30,7 @@ export const InfoModal = ({ isOpen, handleClose }: Props) => {
         <Cell value="死" />
       </div>
       <p className="text-sm text-gray-500 dark:text-gray-300">
-        The letter L is in the word but in the wrong spot.
+        「老」の字は、文字は合っていますが位置が合っていません。
       </p>
 
       <div className="flex justify-center mb-1 mt-4">
@@ -44,7 +43,7 @@ export const InfoModal = ({ isOpen, handleClose }: Props) => {
         <Cell value="理" />
       </div>
       <p className="text-sm text-gray-500 dark:text-gray-300">
-        The letter U is not in the word in any spot.
+        「比」の字は、「匕」のパーツだけ合っています。このパーツはこの位置で使われています。
       </p>
 
       <div className="flex justify-center mb-1 mt-4">
@@ -57,7 +56,7 @@ export const InfoModal = ({ isOpen, handleClose }: Props) => {
         />
       </div>
       <p className="text-sm text-gray-500 dark:text-gray-300">
-        The letter U is not in the word in any spot.
+        「考」の字は、「耂」のパーツだけ合っていますが、位置が違います。
       </p>
     </BaseModal>
   )
