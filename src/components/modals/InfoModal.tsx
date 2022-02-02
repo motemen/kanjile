@@ -15,33 +15,46 @@ export const InfoModal = ({ isOpen, handleClose }: Props) => {
       </p>
 
       <div className="flex justify-center mb-1 mt-4">
-        <Cell value="W" status={{ type: 'correct' }} />
-        <Cell value="E" />
-        <Cell value="A" />
-        <Cell value="R" />
-        <Cell value="Y" />
+        <Cell value="傍" />
+        <Cell value="若" status={{ type: 'correct' }} />
+        <Cell value="無" />
+        <Cell value="人" />
       </div>
       <p className="text-sm text-gray-500 dark:text-gray-300">
         The letter W is in the word and in the correct spot.
       </p>
 
       <div className="flex justify-center mb-1 mt-4">
-        <Cell value="P" />
-        <Cell value="I" />
-        <Cell value="L" status={{ type: 'present' }} />
-        <Cell value="O" />
-        <Cell value="T" />
+        <Cell value="不" />
+        <Cell value="老" status={{ type: 'present' }} />
+        <Cell value="不" />
+        <Cell value="死" />
       </div>
       <p className="text-sm text-gray-500 dark:text-gray-300">
         The letter L is in the word but in the wrong spot.
       </p>
 
       <div className="flex justify-center mb-1 mt-4">
-        <Cell value="V" />
-        <Cell value="A" />
-        <Cell value="G" />
-        <Cell value="U" status={{ type: 'absent' }} />
-        <Cell value="E" />
+        <Cell
+          value="比"
+          status={{ type: 'radical_correct', radicals: ['匕'] }}
+        />
+        <Cell value="翼" />
+        <Cell value="連" />
+        <Cell value="理" />
+      </div>
+      <p className="text-sm text-gray-500 dark:text-gray-300">
+        The letter U is not in the word in any spot.
+      </p>
+
+      <div className="flex justify-center mb-1 mt-4">
+        <Cell value="沈" />
+        <Cell value="思" />
+        <Cell value="黙" />
+        <Cell
+          value="考"
+          status={{ type: 'radical_present', radicals: ['耂'] }}
+        />
       </div>
       <p className="text-sm text-gray-500 dark:text-gray-300">
         The letter U is not in the word in any spot.
