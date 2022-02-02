@@ -15,9 +15,14 @@ export const Cell = ({ value, status }: Props) => {
       'border-black dark:border-slate-100': value && !status,
       'bg-slate-400 dark:bg-slate-700 text-white border-slate-400 dark:border-slate-700':
         status === 'absent',
-      'bg-blue-500 text-white border-blue-500': status === 'correct',
-      'bg-orange-500 dark:bg-orange-700 text-white border-orange-500 dark:border-orange-700':
+      'bg-green-500 text-white border-green-500': status === 'correct',
+      'bg-yellow-500 dark:bg-yellow-600 text-white border-yellow-500 dark:border-yellow-600':
         status === 'present',
+      'bg-orange-500 dark:bg-orange-600 text-white border-orange-500 dark:border-orange-600':
+        status === 'radical_correct',
+      'bg-red-500 dark:bg-red-700 text-white border-red-500 dark:border-red-700':
+        status === 'radical_present',
+      // TODO: radical_present, radial_correct
       'cell-animation': !!value,
     }
   )

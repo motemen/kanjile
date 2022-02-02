@@ -1,6 +1,13 @@
 import { solution } from './words'
 
-export type CharStatus = 'absent' | 'present' | 'correct'
+import KANJI_TO_RADICAL from '../external/kanjivg-radical/data/kanji2radical.json'
+
+export type CharStatus =
+  | 'absent'
+  | 'radical_present'
+  | 'radical_correct'
+  | 'present'
+  | 'correct'
 
 export type CharValue =
   | 'Q'
@@ -30,6 +37,7 @@ export type CharValue =
   | 'N'
   | 'M'
 
+// only referred by <Keybaord>, we won't need this
 export const getStatuses = (
   guesses: string[]
 ): { [key: string]: CharStatus } => {
@@ -57,46 +65,66 @@ export const getStatuses = (
   return charObj
 }
 
+type Radical = string
+type Char = string
+
 export const getGuessStatuses = (guess: string): CharStatus[] => {
-  const splitSolution = solution.split('')
-  const splitGuess = guess.split('')
+  console.log([solution, guess])
 
-  const solutionCharsTaken = splitSolution.map((_) => false)
+  const solutionChars = solution.split('')
+  const guessChars = guess.split('')
 
-  const statuses: CharStatus[] = Array.from(Array(guess.length))
+  const solutionRadicals = solutionChars.map(
+    (ch) => [ch, ...((KANJI_TO_RADICAL as any)[ch] || [])] as Radical[]
+  )
 
-  // handle all correct cases first
-  splitGuess.forEach((letter, i) => {
-    if (letter === splitSolution[i]) {
-      statuses[i] = 'correct'
-      solutionCharsTaken[i] = true
-      return
+  const solutionCharToIndex: Record<Char, number[]> = {}
+  solutionChars.forEach((c: Char, i: number) => {
+    ;(solutionCharToIndex[c] ||= []).push(i)
+  })
+
+  const solutionRadicalToIndex: Record<Radical, number[]> = {}
+  solutionRadicals.forEach((rr: Radical[], i: number) => {
+    for (const r of rr) {
+      ;(solutionRadicalToIndex[r] ||= []).push(i)
     }
   })
 
-  splitGuess.forEach((letter, i) => {
-    if (statuses[i]) return
+  console.log(solutionRadicalToIndex)
 
-    if (!splitSolution.includes(letter)) {
-      // handles the absent case
-      statuses[i] = 'absent'
-      return
-    }
-
-    // now we are left with "present"s
-    const indexOfPresentChar = splitSolution.findIndex(
-      (x, index) => x === letter && !solutionCharsTaken[index]
-    )
-
-    if (indexOfPresentChar > -1) {
-      statuses[i] = 'present'
-      solutionCharsTaken[indexOfPresentChar] = true
-      return
-    } else {
-      statuses[i] = 'absent'
-      return
+  const guessRadicals = guessChars.map(
+    (ch) => [ch, ...((KANJI_TO_RADICAL as any)[ch] || [])] as Radical[]
+  )
+  guessRadicals.forEach((rr, i) => {
+    for (const r of rr) {
+      const ai = solutionRadicalToIndex[r]
+      console.log({ radical: r, guessIndex: i, solutionIndex: ai })
     }
   })
 
-  return statuses
+  const result = solutionChars.map<CharStatus>(() => 'absent')
+
+  for (let i = 0; i < guessChars.length; i++) {
+    if (guessChars[i] === solutionChars[i]) {
+      result[i] = 'correct'
+      continue
+    }
+    if (solutionCharToIndex[guessChars[i]]) {
+      result[i] = 'present'
+      continue
+    }
+
+    const rr = guessRadicals[i]
+    for (const r of rr) {
+      if (r in solutionRadicalToIndex) {
+        result[i] = solutionRadicalToIndex[r].some((j) => j === i)
+          ? 'radical_correct'
+          : 'radical_present'
+      }
+    }
+  }
+
+  console.log(result)
+
+  return result
 }
