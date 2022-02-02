@@ -1,6 +1,8 @@
 import { CharStatus } from '../../lib/statuses'
 import classnames from 'classnames'
 import useSWR from 'swr'
+import { useContext } from 'react'
+import { OptionsContext } from '../../lib/options'
 
 type Props = {
   value?: string
@@ -8,7 +10,8 @@ type Props = {
 }
 
 export const Cell = ({ value, status }: Props) => {
-  const useKanjiVG = true
+  const { options } = useContext(OptionsContext)
+  const { useKanjiVG } = options
 
   const classes = classnames(
     'w-14 h-14 border-solid border-2 flex items-center justify-center mx-0.5 text-lg font-bold rounded dark:text-white',
@@ -31,7 +34,7 @@ export const Cell = ({ value, status }: Props) => {
     useKanjiVG && 'bg-transparent dark:bg-transparent'
   )
 
-  const { data: doc, error } = useSWR(value, async (char) => {
+  const { data: doc, error } = useSWR(useKanjiVG && value, async (char) => {
     let code = char.charCodeAt(0).toString(16).toLowerCase()
     code = '0'.repeat(5 - code.length) + code
 

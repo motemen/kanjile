@@ -2,6 +2,7 @@ import {
   InformationCircleIcon,
   ChartBarIcon,
   SunIcon,
+  CogIcon,
 } from '@heroicons/react/outline'
 import { useState, useEffect } from 'react'
 import { Alert } from './components/alerts/Alert'
@@ -10,6 +11,7 @@ import { TextInputKeyboard } from './components/keyboard/TextInputKeyboard'
 import { AboutModal } from './components/modals/AboutModal'
 import { InfoModal } from './components/modals/InfoModal'
 import { StatsModal } from './components/modals/StatsModal'
+import { OptionsModal } from './components/modals/OptionsModal'
 import {
   GAME_TITLE,
   WIN_MESSAGES,
@@ -25,6 +27,7 @@ import {
   loadGameStateFromLocalStorage,
   saveGameStateToLocalStorage,
 } from './lib/localStorage'
+import { loadOptions, OptionsContext, storeOptions } from './lib/options'
 
 import './App.css'
 
@@ -39,6 +42,7 @@ function App() {
   const [isGameWon, setIsGameWon] = useState(false)
   const [isInfoModalOpen, setIsInfoModalOpen] = useState(false)
   const [isAboutModalOpen, setIsAboutModalOpen] = useState(false)
+  const [isOptionsModalOpen, setIsOptionsModalOpen] = useState(false)
   const [isNotEnoughLetters, setIsNotEnoughLetters] = useState(false)
   const [isStatsModalOpen, setIsStatsModalOpen] = useState(false)
   const [isWordNotFoundAlertOpen, setIsWordNotFoundAlertOpen] = useState(false)
@@ -145,69 +149,86 @@ function App() {
   }
 
   return (
-    <div className="py-8 max-w-7xl mx-auto sm:px-6 lg:px-8">
-      <div className="flex w-80 mx-auto items-center mb-8 mt-12">
-        <h1 className="text-xl grow font-bold dark:text-white">{GAME_TITLE}</h1>
-        <SunIcon
-          className="h-6 w-6 cursor-pointer dark:stroke-white"
-          onClick={() => handleDarkMode(!isDarkMode)}
+    <OptionsContext.Provider
+      value={{ options: loadOptions(), setOptions: storeOptions }}
+    >
+      <div className="py-8 max-w-7xl mx-auto sm:px-6 lg:px-8">
+        <div className="flex w-80 mx-auto items-center mb-8 mt-12">
+          <h1 className="text-xl grow font-bold dark:text-white">
+            {GAME_TITLE}
+          </h1>
+          <SunIcon
+            className="h-6 w-6 cursor-pointer dark:stroke-white"
+            onClick={() => handleDarkMode(!isDarkMode)}
+          />
+          <CogIcon
+            className="h-6 w-6 cursor-pointer dark:stroke-white"
+            onClick={() => setIsOptionsModalOpen(true)}
+          />
+          <InformationCircleIcon
+            className="h-6 w-6 cursor-pointer dark:stroke-white"
+            onClick={() => setIsInfoModalOpen(true)}
+          />
+          <ChartBarIcon
+            className="h-6 w-6 cursor-pointer dark:stroke-white"
+            onClick={() => setIsStatsModalOpen(true)}
+          />
+        </div>
+        <Grid guesses={guesses} currentGuess={currentGuess} />
+        <TextInputKeyboard
+          onText={onText}
+          onEnter={onEnter}
+          guessIsEmpty={currentGuess === ''}
         />
-        <InformationCircleIcon
-          className="h-6 w-6 cursor-pointer dark:stroke-white"
-          onClick={() => setIsInfoModalOpen(true)}
+        <InfoModal
+          isOpen={isInfoModalOpen}
+          handleClose={() => setIsInfoModalOpen(false)}
         />
-        <ChartBarIcon
-          className="h-6 w-6 cursor-pointer dark:stroke-white"
-          onClick={() => setIsStatsModalOpen(true)}
+        <StatsModal
+          isOpen={isStatsModalOpen}
+          handleClose={() => setIsStatsModalOpen(false)}
+          guesses={guesses}
+          gameStats={stats}
+          isGameLost={isGameLost}
+          isGameWon={isGameWon}
+          handleShare={() => {
+            setSuccessAlert(GAME_COPIED_MESSAGE)
+            return setTimeout(() => setSuccessAlert(''), ALERT_TIME_MS)
+          }}
+        />
+        <AboutModal
+          isOpen={isAboutModalOpen}
+          handleClose={() => setIsAboutModalOpen(false)}
+        />
+        <OptionsModal
+          isOpen={isOptionsModalOpen}
+          handleClose={() => setIsOptionsModalOpen(false)}
+        />
+
+        <button
+          type="button"
+          className="mx-auto mt-8 flex items-center px-2.5 py-1.5 border border-transparent text-xs font-medium rounded text-indigo-700 bg-indigo-100 hover:bg-indigo-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 select-none"
+          onClick={() => setIsAboutModalOpen(true)}
+        >
+          {ABOUT_GAME_MESSAGE}
+        </button>
+
+        <Alert
+          message={NOT_ENOUGH_LETTERS_MESSAGE}
+          isOpen={isNotEnoughLetters}
+        />
+        <Alert
+          message={WORD_NOT_FOUND_MESSAGE}
+          isOpen={isWordNotFoundAlertOpen}
+        />
+        <Alert message={CORRECT_WORD_MESSAGE(solution)} isOpen={isGameLost} />
+        <Alert
+          message={successAlert}
+          isOpen={successAlert !== ''}
+          variant="success"
         />
       </div>
-      <Grid guesses={guesses} currentGuess={currentGuess} />
-      <TextInputKeyboard
-        onText={onText}
-        onEnter={onEnter}
-        guessIsEmpty={currentGuess === ''}
-      />
-      <InfoModal
-        isOpen={isInfoModalOpen}
-        handleClose={() => setIsInfoModalOpen(false)}
-      />
-      <StatsModal
-        isOpen={isStatsModalOpen}
-        handleClose={() => setIsStatsModalOpen(false)}
-        guesses={guesses}
-        gameStats={stats}
-        isGameLost={isGameLost}
-        isGameWon={isGameWon}
-        handleShare={() => {
-          setSuccessAlert(GAME_COPIED_MESSAGE)
-          return setTimeout(() => setSuccessAlert(''), ALERT_TIME_MS)
-        }}
-      />
-      <AboutModal
-        isOpen={isAboutModalOpen}
-        handleClose={() => setIsAboutModalOpen(false)}
-      />
-
-      <button
-        type="button"
-        className="mx-auto mt-8 flex items-center px-2.5 py-1.5 border border-transparent text-xs font-medium rounded text-indigo-700 bg-indigo-100 hover:bg-indigo-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 select-none"
-        onClick={() => setIsAboutModalOpen(true)}
-      >
-        {ABOUT_GAME_MESSAGE}
-      </button>
-
-      <Alert message={NOT_ENOUGH_LETTERS_MESSAGE} isOpen={isNotEnoughLetters} />
-      <Alert
-        message={WORD_NOT_FOUND_MESSAGE}
-        isOpen={isWordNotFoundAlertOpen}
-      />
-      <Alert message={CORRECT_WORD_MESSAGE(solution)} isOpen={isGameLost} />
-      <Alert
-        message={successAlert}
-        isOpen={successAlert !== ''}
-        variant="success"
-      />
-    </div>
+    </OptionsContext.Provider>
   )
 }
 
