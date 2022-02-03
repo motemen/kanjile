@@ -5,7 +5,7 @@ export interface Options {
 }
 
 export const DEFAULT_OPTIONS: Options = {
-  useKanjiVG: false,
+  useKanjiVG: true,
 }
 
 interface OptionsContextType {
