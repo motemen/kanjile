@@ -7,7 +7,6 @@ import {
 import { useState, useEffect } from 'react'
 import { Alert } from './components/alerts/Alert'
 import { Grid } from './components/grid/Grid'
-import { TextInputKeyboard } from './components/keyboard/TextInputKeyboard'
 import { AboutModal } from './components/modals/AboutModal'
 import { InfoModal } from './components/modals/InfoModal'
 import { StatsModal } from './components/modals/StatsModal'
@@ -179,11 +178,11 @@ function App() {
             onClick={() => setIsStatsModalOpen(true)}
           />
         </div>
-        <Grid guesses={guesses} currentGuess={currentGuess} />
-        <TextInputKeyboard
+        <Grid
+          guesses={guesses}
+          currentGuess={currentGuess}
           onText={onText}
           onEnter={onEnter}
-          guessIsEmpty={currentGuess === ''}
         />
         <InfoModal
           isOpen={isInfoModalOpen}

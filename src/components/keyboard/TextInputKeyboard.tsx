@@ -25,7 +25,7 @@ export const TextInputKeyboard = ({ onText, onEnter, guessIsEmpty }: Props) => {
   }, [guessIsEmpty])
 
   const classes = classNames(
-    'w-60 h-14 absolute bg-transparent dark:text-white focus:outline-none'
+    'w-60 h-14 absolute bg-transparent text-transparent focus:outline-none'
   )
   const onChange = (ev: ChangeEvent<HTMLInputElement>) => {
     onText(ev.target.value)
