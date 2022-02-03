@@ -50,6 +50,7 @@ export const Cell = ({ value, status }: Props) => {
     const svg = doc.querySelector('svg')!
     svg.removeAttribute('height')
     svg.removeAttribute('width')
+    svg.setAttribute('style', 'width: 100%')
 
     return doc
   })
