@@ -1,3 +1,4 @@
+import { MAX_GUESSES } from '../constants/game'
 import {
   GameStats,
   loadStatsFromLocalStorage,
@@ -15,12 +16,12 @@ export const addStatsForCompletedGame = (
 
   stats.totalGames += 1
 
-  if (count > 5 /* = 6-1 */) {
+  if (count > MAX_GUESSES - 1) {
     // A fail situation
     stats.currentStreak = 0
     stats.gamesFailed += 1
   } else {
-    stats.winDistribution[count] += 1
+    stats.winDistribution[count] = (stats.winDistribution[count] || 0) + 1
     stats.currentStreak += 1
 
     if (stats.bestStreak < stats.currentStreak) {
