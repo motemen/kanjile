@@ -2,10 +2,12 @@ import * as React from 'react'
 
 export interface Options {
   useKanjiVG: boolean
+  __migrate_01_forceUseKanjiVG?: boolean
 }
 
 export const DEFAULT_OPTIONS: Options = {
   useKanjiVG: true,
+  __migrate_01_forceUseKanjiVG: true,
 }
 
 interface OptionsContextType {
@@ -20,7 +22,17 @@ export const OptionsContext = React.createContext<OptionsContextType>({
 
 export function loadOptions(): Options {
   try {
-    return JSON.parse(localStorage.getItem('options') || '')
+    const options = JSON.parse(
+      localStorage.getItem('options') || ''
+    ) as unknown as Options
+    if (!options.__migrate_01_forceUseKanjiVG) {
+      if (!options.useKanjiVG) {
+        options.useKanjiVG = true
+      }
+      options.__migrate_01_forceUseKanjiVG = true
+      storeOptions(options)
+    }
+    return options
   } catch (err) {
     return DEFAULT_OPTIONS
   }
