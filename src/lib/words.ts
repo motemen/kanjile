@@ -1,11 +1,14 @@
 import { WORDS } from '../constants/wordlist'
-import { VALIDGUESSES } from '../constants/validGuesses'
 
 export const isWordInWordList = (word: string) => {
+  return true
+
+  /*
   return (
     WORDS.includes(word.toLowerCase()) ||
     VALIDGUESSES.includes(word.toLowerCase())
   )
+  */
 }
 
 export const isWinningWord = (word: string) => {
