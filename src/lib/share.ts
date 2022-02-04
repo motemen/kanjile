@@ -2,7 +2,6 @@ import { getGuessStatuses } from './statuses'
 import { solutionIndex } from './words'
 import { GAME_TITLE } from '../constants/strings'
 import { MAX_GUESSES } from '../constants/game'
-import { isNativeError } from 'util/types'
 
 export const shareStatus = (guesses: string[], lost: boolean) => {
   navigator.clipboard.writeText(
@@ -36,7 +35,7 @@ export const generateEmojiGrid = (guesses: string[]) => {
             case 'absent':
               return '⬜'
             default:
-              return {} as never
+              return '⬜' as never
           }
         })
         .join('')
