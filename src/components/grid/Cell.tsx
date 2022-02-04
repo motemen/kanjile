@@ -25,10 +25,11 @@ export const Cell = ({ value, status }: Props) => {
       'bg-yellow-500 dark:bg-yellow-600 text-white border-yellow-500 dark:border-yellow-600':
         status?.type === 'present',
       'bg-orange-500 dark:bg-orange-600 text-white border-orange-500 dark:border-orange-600':
-        status?.type === 'radical_correct',
+        status?.type === 'radical' && (status.correct?.length ?? 0) > 0,
       'bg-red-500 dark:bg-red-700 text-white border-red-500 dark:border-red-700':
-        status?.type === 'radical_present',
-      // TODO: radical_present, radial_correct
+        status?.type === 'radical' &&
+        (status.correct?.length ?? 0) === 0 &&
+        (status.present?.length ?? 0) > 0,
       'cell-animation': !!value,
     },
     useKanjiVG && 'bg-transparent dark:bg-transparent'
@@ -55,23 +56,26 @@ export const Cell = ({ value, status }: Props) => {
     return doc
   })
 
-  if (doc && status && 'radicals' in status) {
-    status.radicals.forEach((r) => {
-      // XXX なんでかうまくいかない？
-      // const el = doc.querySelectorAll(`g[kvg\\:element="${r}"]`)
-      const els = doc.querySelectorAll('g')
-      els.forEach((el) => {
-        if (el.getAttributeNS('http://kanjivg.tagaini.net', 'element') !== r)
-          return
-        el.setAttribute(
-          'class',
-          classnames({
-            'stroke-orange-500 dark:stroke-orange-600':
-              status?.type === 'radical_correct',
-            'stroke-red-500 dark:stroke-red-700':
-              status?.type === 'radical_present',
-          })
-        )
+  if (doc && status?.type === 'radical') {
+    const seen: Record<string, boolean> = {}
+    ;(['correct', 'present'] as const).forEach((key) => {
+      status[key]?.forEach((r) => {
+        if (seen[r]) return
+        seen[r] = true
+        // XXX なんでかうまくいかない？
+        // const el = doc.querySelectorAll(`g[kvg\\:element="${r}"]`)
+        const els = doc.querySelectorAll('g')
+        els.forEach((el) => {
+          if (el.getAttributeNS('http://kanjivg.tagaini.net', 'element') !== r)
+            return
+          el.setAttribute(
+            'class',
+            classnames({
+              'stroke-orange-500 dark:stroke-orange-600': key === 'correct',
+              'stroke-red-500 dark:stroke-red-700': key === 'present',
+            })
+          )
+        })
       })
     })
   }

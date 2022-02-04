@@ -4,8 +4,7 @@ import KANJI_TO_RADICAL from '../external/kanjivg-radical/data/kanji2radical.jso
 
 export type CharStatus =
   | { type: 'absent' }
-  | { type: 'radical_present'; radicals: string[] }
-  | { type: 'radical_correct'; radicals: string[] }
+  | { type: 'radical'; correct?: Radical[]; present?: Radical[] }
   | { type: 'present' }
   | { type: 'correct' }
 
@@ -49,6 +48,13 @@ type Radical = string
 type Char = string
 
 export const getGuessStatuses = (guess: string): CharStatus[] => {
+  return getGuessStatusesTo(guess, solution)
+}
+
+export const getGuessStatusesTo = (
+  guess: string,
+  solution: string
+): CharStatus[] => {
   const solutionChars = solution.split('')
   const guessChars = guess.split('')
 
@@ -87,9 +93,18 @@ export const getGuessStatuses = (guess: string): CharStatus[] => {
     const rr = guessRadicals[i]
     for (const r of rr) {
       if (r in solutionRadicalToIndex) {
-        result[i] = solutionRadicalToIndex[r].some((j) => j === i)
-          ? { type: 'radical_correct', radicals: [r] }
-          : { type: 'radical_present', radicals: [r] }
+        const key = solutionRadicalToIndex[r].some((j) => j === i)
+          ? 'correct'
+          : 'present'
+
+        const res = result[i]
+        const radicals = (res.type === 'radical' && res[key]) || []
+
+        result[i] = {
+          ...res,
+          type: 'radical',
+          [key]: [...radicals, r],
+        }
       }
     }
   }

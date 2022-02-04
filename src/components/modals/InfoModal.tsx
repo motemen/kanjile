@@ -1,3 +1,4 @@
+import { CogIcon } from '@heroicons/react/outline'
 import { MAX_GUESSES } from '../../constants/game'
 import { Cell } from '../grid/Cell'
 import { BaseModal } from './BaseModal'
@@ -36,10 +37,7 @@ export const InfoModal = ({ isOpen, handleClose }: Props) => {
       </p>
 
       <div className="flex justify-center mb-1 mt-4">
-        <Cell
-          value="比"
-          status={{ type: 'radical_correct', radicals: ['匕'] }}
-        />
+        <Cell value="比" status={{ type: 'radical', correct: ['匕'] }} />
         <Cell value="翼" />
         <Cell value="連" />
         <Cell value="理" />
@@ -52,13 +50,14 @@ export const InfoModal = ({ isOpen, handleClose }: Props) => {
         <Cell value="沈" />
         <Cell value="思" />
         <Cell value="黙" />
-        <Cell
-          value="考"
-          status={{ type: 'radical_present', radicals: ['耂'] }}
-        />
+        <Cell value="考" status={{ type: 'radical', present: ['耂'] }} />
       </div>
       <p className="text-sm text-gray-500 dark:text-gray-300">
         「考」の字は、「耂」のパーツだけ合っていますが、位置が違います。
+      </p>
+      <p className="mt-6 text-sm text-gray-500 dark:text-gray-300">
+        設定 <CogIcon className="inline h-6 w-6 dark:stroke-white" /> から "Use
+        KanjiVG" を有効にすると、パーツを確認しやすいです。
       </p>
     </BaseModal>
   )

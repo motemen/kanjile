@@ -2,6 +2,7 @@ import { getGuessStatuses } from './statuses'
 import { solutionIndex } from './words'
 import { GAME_TITLE } from '../constants/strings'
 import { MAX_GUESSES } from '../constants/game'
+import { isNativeError } from 'util/types'
 
 export const shareStatus = (guesses: string[], lost: boolean) => {
   navigator.clipboard.writeText(
@@ -19,18 +20,23 @@ export const generateEmojiGrid = (guesses: string[]) => {
       const status = getGuessStatuses(guess)
       return guess
         .split('')
-        .map((letter, i) => {
-          switch (status[i]?.type) {
+        .map((letter, i): string => {
+          const s = status[i]
+          switch (s.type) {
             case 'correct':
               return '🟩'
             case 'present':
               return '🟨'
-            case 'radical_correct':
-              return '🟧'
-            case 'radical_present':
-              return '🟥'
-            default:
+            case 'radical':
+              if ((s.correct?.length ?? 0) > 0) {
+                return '🟧'
+              } else {
+                return '🟥'
+              }
+            case 'absent':
               return '⬜'
+            default:
+              return {} as never
           }
         })
         .join('')
