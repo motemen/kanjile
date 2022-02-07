@@ -35,26 +35,31 @@ export const Cell = ({ value, status }: Props) => {
     useKanjiVG && 'bg-transparent dark:bg-transparent'
   )
 
-  const { data: doc, error } = useSWR(useKanjiVG && value, async (char) => {
-    let code = char.charCodeAt(0).toString(16).toLowerCase()
-    code = '0'.repeat(5 - code.length) + code
+  const { data: docCached, error } = useSWR(
+    useKanjiVG && value,
+    async (char) => {
+      let code = char.charCodeAt(0).toString(16).toLowerCase()
+      code = '0'.repeat(5 - code.length) + code
 
-    const resp = await fetch(`./kanjivg/kanji/${code}.svg`)
-    if (!resp.ok) {
-      throw new Error(resp.statusText)
+      const resp = await fetch(`./kanjivg/kanji/${code}.svg`)
+      if (!resp.ok) {
+        throw new Error(resp.statusText)
+      }
+
+      const svgXML = await resp.text()
+      const parser = new DOMParser()
+      const doc = parser.parseFromString(svgXML, 'image/svg+xml')
+
+      const svg = doc.querySelector('svg')!
+      svg.removeAttribute('height')
+      svg.removeAttribute('width')
+      svg.setAttribute('style', 'width: 100%')
+
+      return doc
     }
+  )
 
-    const svgXML = await resp.text()
-    const parser = new DOMParser()
-    const doc = parser.parseFromString(svgXML, 'image/svg+xml')
-
-    const svg = doc.querySelector('svg')!
-    svg.removeAttribute('height')
-    svg.removeAttribute('width')
-    svg.setAttribute('style', 'width: 100%')
-
-    return doc
-  })
+  const doc = docCached?.cloneNode(true) as Document | undefined
 
   if (doc && status?.type === 'radical') {
     const seen: Record<string, boolean> = {}
