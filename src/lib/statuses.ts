@@ -45,7 +45,6 @@ export const getStatuses = (
 }
 
 type Radical = string
-type Char = string
 
 export const getGuessStatuses = (guess: string): CharStatus[] => {
   return getGuessStatusesTo(guess, solution)
