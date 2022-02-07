@@ -55,59 +55,91 @@ export const getGuessStatusesTo = (
   guess: string,
   solution: string
 ): CharStatus[] => {
-  const solutionChars = solution.split('')
+  type SolutionItem = {
+    char: string
+    radicals: (string | null)[]
+  } | null
+  const solutionItems: SolutionItem[] = solution.split('').flatMap((ch) => {
+    return {
+      char: ch,
+      radicals: [
+        ch,
+        ...(KANJI_TO_RADICAL[ch as keyof typeof KANJI_TO_RADICAL] || []),
+      ],
+    }
+  })
+
   const guessChars = guess.split('')
 
-  const solutionRadicals = solutionChars.map(
-    (ch) => [ch, ...((KANJI_TO_RADICAL as any)[ch] || [])] as Radical[]
-  )
+  const result = solution.split('').map<CharStatus | null>(() => null)
 
-  const solutionCharToIndex: Record<Char, number[]> = {}
-  solutionChars.forEach((c: Char, i: number) => {
-    ;(solutionCharToIndex[c] ||= []).push(i)
-  })
-
-  const solutionRadicalToIndex: Record<Radical, number[]> = {}
-  solutionRadicals.forEach((rr: Radical[], i: number) => {
-    for (const r of rr) {
-      ;(solutionRadicalToIndex[r] ||= []).push(i)
-    }
-  })
-
-  const guessRadicals = guessChars.map(
-    (ch) => [ch, ...((KANJI_TO_RADICAL as any)[ch] || [])] as Radical[]
-  )
-
-  const result = solutionChars.map<CharStatus>(() => ({ type: 'absent' }))
-
-  for (let i = 0; i < guessChars.length; i++) {
-    if (guessChars[i] === solutionChars[i]) {
+  // Find correct char
+  guessChars.forEach((ch, i) => {
+    if (ch === solutionItems[i]?.char) {
       result[i] = { type: 'correct' }
-      continue
+      solutionItems[i] = null
     }
-    if (solutionCharToIndex[guessChars[i]]) {
-      result[i] = { type: 'present' }
-      continue
-    }
+  })
 
-    const rr = guessRadicals[i]
-    for (const r of rr) {
-      if (r in solutionRadicalToIndex) {
-        const key = solutionRadicalToIndex[r].some((j) => j === i)
-          ? 'correct'
-          : 'present'
+  // Find present char
+  guessChars.forEach((ch, i) => {
+    if (result[i]) return
 
-        const res = result[i]
-        const radicals = (res.type === 'radical' && res[key]) || []
-
-        result[i] = {
-          ...res,
-          type: 'radical',
-          [key]: [...radicals, r],
-        }
+    for (let j = 0; j < solutionItems.length; j++) {
+      if (ch === solutionItems[j]?.char) {
+        solutionItems[j] = null
+        result[i] = { type: 'present' }
+        break
       }
     }
-  }
+  })
 
-  return result
+  // Find correct radical
+  guessChars.forEach((ch, i) => {
+    if (result[i]) return
+    if (!solutionItems[i]) return
+    ;[
+      ch,
+      ...(KANJI_TO_RADICAL[ch as keyof typeof KANJI_TO_RADICAL] || []),
+    ].forEach((r) => {
+      const j = solutionItems[i]!.radicals.indexOf(r)
+      if (j !== -1) {
+        solutionItems[i]!.radicals[j] = null
+        if (!result[i]) {
+          result[i] = {
+            type: 'radical',
+          }
+        }
+        if (result[i]?.type === 'radical') {
+          ;((result[i] as any).correct ||= []).push(r)
+        }
+      }
+    })
+  })
+
+  // Find present radical
+  guessChars.forEach((ch, i) => {
+    ;[
+      ch,
+      ...(KANJI_TO_RADICAL[ch as keyof typeof KANJI_TO_RADICAL] || []),
+    ].forEach((r) => {
+      for (let j = 0; j < solutionItems.length; j++) {
+        if (!solutionItems[j]) continue
+        const k = solutionItems[j]?.radicals.indexOf(r) || -1
+        if (k !== -1) {
+          solutionItems[j]!.radicals[k] = null
+          if (!result[i]) {
+            result[i] = {
+              type: 'radical',
+            }
+          }
+          if (result[i]?.type === 'radical') {
+            ;((result[i] as any).present ||= []).push(r)
+          }
+        }
+      }
+    })
+  })
+
+  return result.map((r) => r || { type: 'absent' })
 }
