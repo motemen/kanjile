@@ -22,11 +22,11 @@ export const Cell = ({ value, status }: Props) => {
       'bg-slate-400 dark:bg-slate-700 text-white border-slate-400 dark:border-slate-700':
         status?.type === 'absent',
       'bg-green-500 text-white border-green-500': status?.type === 'correct',
-      'bg-yellow-500 dark:bg-yellow-600 text-white border-yellow-500 dark:border-yellow-600':
+      'bg-yellow-500 dark:bg-yellow-600 text-white border-yellow-500 dark:border-yellow-600 colorblind:border-double':
         status?.type === 'present',
-      'bg-orange-500 dark:bg-orange-600 text-white border-orange-500 dark:border-orange-600':
+      'bg-orange-500 dark:bg-orange-600 text-white border-orange-500 dark:border-orange-600 colorblind:border-dashed':
         status?.type === 'radical' && (status.correct?.length ?? 0) > 0,
-      'bg-red-500 dark:bg-red-700 text-white border-red-500 dark:border-red-700':
+      'bg-red-500 dark:bg-red-700 text-white border-red-500 dark:border-red-700 colorblind:border-dotted':
         status?.type === 'radical' &&
         (status.correct?.length ?? 0) === 0 &&
         (status.present?.length ?? 0) > 0,
@@ -61,6 +61,10 @@ export const Cell = ({ value, status }: Props) => {
 
   const doc = docCached?.cloneNode(true) as Document | undefined
 
+  if (error) {
+    console.error(error)
+  }
+
   if (doc && status?.type === 'radical') {
     const seen: Record<string, boolean> = {}
     ;(['correct', 'present'] as const).forEach((key) => {
@@ -89,11 +93,6 @@ export const Cell = ({ value, status }: Props) => {
     })
   }
 
-  if (error) {
-    console.error(error)
-  }
-
-  // TODO: make option
   if (doc) {
     return (
       <div
