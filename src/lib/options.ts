@@ -2,11 +2,13 @@ import * as React from 'react'
 
 export interface Options {
   useKanjiVG: boolean
+  enableColorBlindSupport?: boolean
   __migrate_01_forceUseKanjiVG?: boolean
 }
 
 export const DEFAULT_OPTIONS: Options = {
   useKanjiVG: true,
+  enableColorBlindSupport: false,
   __migrate_01_forceUseKanjiVG: true,
 }
 
@@ -21,6 +23,8 @@ export const OptionsContext = React.createContext<OptionsContextType>({
 })
 
 export function loadOptions(): Options {
+  console.log('loadOptions')
+
   try {
     const options = JSON.parse(
       localStorage.getItem('options') || ''
