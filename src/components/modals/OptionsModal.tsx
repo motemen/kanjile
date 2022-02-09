@@ -11,12 +11,25 @@ type Props = {
 export const OptionsModal = ({ isOpen, handleClose }: Props) => {
   const { options, setOptions } = useContext(OptionsContext)
   const [useKanjiVG, setUseKanjiVG] = useState(options.useKanjiVG)
+  const [enableColorBlindSupport, setEnableColorBlindSupport] = useState(
+    options.enableColorBlindSupport ?? false
+  )
 
   const onChangeUseKanjiVG = (useKanjiVG: boolean) => {
     setUseKanjiVG(useKanjiVG)
     setOptions({
       ...options,
       useKanjiVG,
+    })
+  }
+
+  const onChangeEnableColorblindSupport = (
+    enableColorBlindSupport: boolean
+  ) => {
+    setEnableColorBlindSupport(enableColorBlindSupport)
+    setOptions({
+      ...options,
+      enableColorBlindSupport,
     })
   }
 
@@ -40,6 +53,29 @@ export const OptionsModal = ({ isOpen, handleClose }: Props) => {
             <span
               className={`${
                 useKanjiVG ? 'translate-x-6' : 'translate-x-1'
+              } inline-block w-4 h-4 transform transition ease-in-out duration-200 bg-white rounded-full`}
+            />
+          </Switch>
+        </Switch.Group>
+      </div>
+      <div>
+        <Switch.Group>
+          <Switch.Label className="mr-4 dark:text-gray-100">
+            Use Colorblind support
+          </Switch.Label>
+          <Switch
+            checked={enableColorBlindSupport}
+            onChange={onChangeEnableColorblindSupport}
+            className={`${
+              enableColorBlindSupport
+                ? 'bg-cyan-500 dark:bg-cyan-500'
+                : 'bg-cyan-700 dark:bg-cyan-900'
+            }
+		  elative inline-flex items-center h-6 rounded-full w-11`}
+          >
+            <span
+              className={`${
+                enableColorBlindSupport ? 'translate-x-6' : 'translate-x-1'
               } inline-block w-4 h-4 transform transition ease-in-out duration-200 bg-white rounded-full`}
             />
           </Switch>

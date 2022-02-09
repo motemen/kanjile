@@ -72,6 +72,11 @@ function App() {
 
   const [stats, setStats] = useState(() => loadStats())
 
+  const [options, setOptions] = useState(() => loadOptions())
+  useEffect(() => {
+    storeOptions(options)
+  }, [options])
+
   useEffect(() => {
     if (isDarkMode) {
       document.documentElement.classList.add('dark')
@@ -79,6 +84,14 @@ function App() {
       document.documentElement.classList.remove('dark')
     }
   }, [isDarkMode])
+
+  useEffect(() => {
+    if (options.enableColorBlindSupport) {
+      document.documentElement.classList.add('colorblind')
+    } else {
+      document.documentElement.classList.remove('colorblind')
+    }
+  }, [options.enableColorBlindSupport])
 
   const handleDarkMode = (isDark: boolean) => {
     setIsDarkMode(isDark)
@@ -153,9 +166,7 @@ function App() {
   }
 
   return (
-    <OptionsContext.Provider
-      value={{ options: loadOptions(), setOptions: storeOptions }}
-    >
+    <OptionsContext.Provider value={{ options, setOptions }}>
       <div className="py-8 max-w-7xl mx-auto sm:px-6 lg:px-8">
         <div className="flex w-80 mx-auto items-center mb-8 mt-12">
           <h1 className="text-xl grow font-bold dark:text-white">
