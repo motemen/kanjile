@@ -70,9 +70,12 @@ export const Cell = ({ value, status }: Props) => {
         // XXX なんでかうまくいかない？
         // const el = doc.querySelectorAll(`g[kvg\\:element="${r}"]`)
         const els = doc.querySelectorAll('g')
-        els.forEach((el) => {
+        for (let i = 0; i < els.length; i++) {
+          const el = els[i]
+
           if (el.getAttributeNS('http://kanjivg.tagaini.net', 'element') !== r)
-            return
+            continue
+
           el.setAttribute(
             'class',
             classnames({
@@ -80,7 +83,8 @@ export const Cell = ({ value, status }: Props) => {
               'stroke-red-500 dark:stroke-red-700': key === 'present',
             })
           )
-        })
+          break
+        }
       })
     })
   }
