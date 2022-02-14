@@ -21,10 +21,11 @@ export const Cell = ({ value, status }: Props) => {
       'border-black dark:border-slate-100': value && !status,
       'bg-slate-400 dark:bg-slate-700 text-white border-slate-400 dark:border-slate-700':
         status?.type === 'absent',
-      'bg-green-500 text-white border-green-500': status?.type === 'correct',
+      'bg-green-500 text-white border-green-500 colorblind:border-4':
+        status?.type === 'correct',
       'bg-yellow-500 dark:bg-yellow-600 text-white border-yellow-500 dark:border-yellow-600 colorblind:border-double':
         status?.type === 'present',
-      'bg-orange-500 dark:bg-orange-600 text-white border-orange-500 dark:border-orange-600 colorblind:border-dashed':
+      'bg-orange-500 dark:bg-orange-600 text-white border-orange-500 dark:border-orange-600 colorblind:border-dashed border-4':
         status?.type === 'radical' && (status.correct?.length ?? 0) > 0,
       'bg-red-500 dark:bg-red-700 text-white border-red-500 dark:border-red-700 colorblind:border-dotted':
         status?.type === 'radical' &&
