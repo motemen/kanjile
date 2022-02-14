@@ -1,15 +1,15 @@
 {
   "files": {
-    "main.css": "/kanjile/static/css/main.a1043c33.css",
-    "main.js": "/kanjile/static/js/main.f1fcda5d.js",
+    "main.css": "/kanjile/static/css/main.ecbd363a.css",
+    "main.js": "/kanjile/static/js/main.f53d2a32.js",
     "static/js/787.c64c5c28.chunk.js": "/kanjile/static/js/787.c64c5c28.chunk.js",
     "index.html": "/kanjile/index.html",
-    "main.a1043c33.css.map": "/kanjile/static/css/main.a1043c33.css.map",
-    "main.f1fcda5d.js.map": "/kanjile/static/js/main.f1fcda5d.js.map",
+    "main.ecbd363a.css.map": "/kanjile/static/css/main.ecbd363a.css.map",
+    "main.f53d2a32.js.map": "/kanjile/static/js/main.f53d2a32.js.map",
     "787.c64c5c28.chunk.js.map": "/kanjile/static/js/787.c64c5c28.chunk.js.map"
   },
   "entrypoints": [
-    "static/css/main.a1043c33.css",
-    "static/js/main.f1fcda5d.js"
+    "static/css/main.ecbd363a.css",
+    "static/js/main.f53d2a32.js"
   ]
 }
