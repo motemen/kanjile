@@ -1,11 +1,23 @@
 import { CharStatus, getGuessStatuses, getGuessStatusesTo } from './statuses'
 
 describe('getGuessStatuesTo', () => {
-  const match = (guess: string, solution: string, result: CharStatus[]) => {
-    test(`${guess} vs ${solution}`, () => {
-      expect(getGuessStatusesTo(guess, solution)).toEqual(result)
-    })
-  }
+  type MatchFunc = (
+    guess: string,
+    solution: string,
+    result: CharStatus[]
+  ) => void
+
+  const mkMatch =
+    (it: jest.It): MatchFunc =>
+    (guess: string, solution: string, result: CharStatus[]) => {
+      it(`${guess} vs ${solution}`, () => {
+        expect(getGuessStatusesTo(guess, solution)).toEqual(result)
+      })
+    }
+
+  const match: MatchFunc & { only: MatchFunc } = Object.assign(mkMatch(test), {
+    only: mkMatch(test.only),
+  })
 
   match('三寒四温', '三寒四温', [
     { type: 'correct' },
@@ -45,12 +57,12 @@ describe('getGuessStatuesTo', () => {
   match('傍若無人', '一生懸命', [
     { type: 'absent' },
     { type: 'absent' },
-    { type: 'radical', present: ['一'] },
+    { type: 'radical', present: ['一', '一'] }, // '一' and '命'
     { type: 'radical', correct: ['人'] },
   ])
 
   match('命令系統', '人口増加', [
-    { type: 'radical', correct: ['人'], present: ['口'] },
+    { type: 'radical', correct: ['人'], present: ['口', '口'] }, // '口' and '加'
     { type: 'absent' },
     { type: 'absent' },
     { type: 'absent' },
@@ -75,5 +87,12 @@ describe('getGuessStatuesTo', () => {
     { type: 'absent' },
     { type: 'radical', correct: ['田'] },
     { type: 'absent' },
+  ])
+
+  match('正体不明', '日進月歩', [
+    { type: 'radical', present: ['止'] },
+    { type: 'absent' },
+    { type: 'absent' },
+    { type: 'radical', present: ['日', '月'] },
   ])
 })

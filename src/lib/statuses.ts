@@ -124,7 +124,7 @@ export const getGuessStatusesTo = (
     ].forEach((r) => {
       for (let j = 0; j < solutionItems.length; j++) {
         if (!solutionItems[j]) continue
-        const k = solutionItems[j]?.radicals.indexOf(r) || -1
+        const k = solutionItems[j]?.radicals.indexOf(r) ?? -1
         if (k !== -1) {
           solutionItems[j]!.radicals[k] = null
           if (!result[i]) {
