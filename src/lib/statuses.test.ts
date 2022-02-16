@@ -1,11 +1,23 @@
 import { CharStatus, getGuessStatuses, getGuessStatusesTo } from './statuses'
 
 describe('getGuessStatuesTo', () => {
-  const match = (guess: string, solution: string, result: CharStatus[]) => {
-    test(`${guess} vs ${solution}`, () => {
-      expect(getGuessStatusesTo(guess, solution)).toEqual(result)
-    })
-  }
+  type MatchFunc = (
+    guess: string,
+    solution: string,
+    result: CharStatus[]
+  ) => void
+
+  const mkMatch =
+    (it: jest.It): MatchFunc =>
+    (guess: string, solution: string, result: CharStatus[]) => {
+      it(`${guess} vs ${solution}`, () => {
+        expect(getGuessStatusesTo(guess, solution)).toEqual(result)
+      })
+    }
+
+  const match: MatchFunc & { only: MatchFunc } = Object.assign(mkMatch(test), {
+    only: mkMatch(test.only),
+  })
 
   match('三寒四温', '三寒四温', [
     { type: 'correct' },
