@@ -76,4 +76,11 @@ describe('getGuessStatuesTo', () => {
     { type: 'radical', correct: ['田'] },
     { type: 'absent' },
   ])
+
+  match('正体不明', '日進月歩', [
+    { type: 'radical', present: ['止'] },
+    { type: 'absent' },
+    { type: 'absent' },
+    { type: 'radical', present: ['日', '月'] },
+  ])
 })
