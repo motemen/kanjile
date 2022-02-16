@@ -16,3 +16,6 @@ jobs:
           npm install
       - run: |
           npm run test
+      - if: ${{ github.ref == 'refs/heads/main' }}
+        run: |
+          npm run deploy
