@@ -23,8 +23,6 @@ export const OptionsContext = React.createContext<OptionsContextType>({
 })
 
 export function loadOptions(): Options {
-  console.log('loadOptions')
-
   try {
     const options = JSON.parse(
       localStorage.getItem('options') || ''

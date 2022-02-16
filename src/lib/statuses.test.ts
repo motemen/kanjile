@@ -57,12 +57,12 @@ describe('getGuessStatuesTo', () => {
   match('傍若無人', '一生懸命', [
     { type: 'absent' },
     { type: 'absent' },
-    { type: 'radical', present: ['一'] },
+    { type: 'radical', present: ['一', '一'] }, // '一' and '命'
     { type: 'radical', correct: ['人'] },
   ])
 
   match('命令系統', '人口増加', [
-    { type: 'radical', correct: ['人'], present: ['口'] },
+    { type: 'radical', correct: ['人'], present: ['口', '口'] }, // '口' and '加'
     { type: 'absent' },
     { type: 'absent' },
     { type: 'absent' },
